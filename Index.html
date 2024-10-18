@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Review</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        #successMessage {
+            color: green;
+            display: none;
+        }
+        canvas {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Daily Review</h2>
+        <form id="dailyReviewForm">
+            <label for="priority1">Priority 1:</label>
+            <input type="text" id="priority1" name="priority1">
+
+            <label for="priority2">Priority 2:</label>
+            <input type="text" id="priority2" name="priority2">
+
+            <label for="priority3">Priority 3:</label>
+            <input type="text" id="priority3" name="priority3">
+
+            <label for="completed">Completed Tasks:</label>
+            <textarea id="completed" name="completed" rows="2"></textarea>
+
+            <label for="challenges">Challenges Faced:</label>
+            <textarea id="challenges" name="challenges" rows="2"></textarea>
+
+            <label for="improvements">Improvements for Tomorrow:</label>
+            <textarea id="improvements" name="improvements" rows="2"></textarea>
+
+            <label for="timeManagement">Time Management (1-10):</label>
+            <input type="number" id="timeManagement" name="timeManagement" min="1" max="10">
+
+            <label for="energy">Energy Levels (1-10):</label>
+            <input type="number" id="energy" name="energy" min="1" max="10">
+
+            <button type="submit">Submit</button>
+        </form>
+        <div id="successMessage">Review submitted successfully!</div>
+
+        <h3>Past Reviews</h3>
+        <ul id="reviewList"></ul>
+
+        <h3>Visualization of Time Management and Energy</h3>
+        <canvas id="reviewChart"></canvas>
+    </div>
+
+    <script>
+        // Handle form submission
+        document.getElementById('dailyReviewForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Get the form values
+            const reviewData = {
+                priority1: document.getElementById('priority1').value,
+                priority2: document.getElementById('priority2').value,
+                priority3: document.getElementById('priority3').value,
+                completed: document.getElementById('completed').value,
+                challenges: document.getElementById('challenges').value,
+                improvements: document.getElementById('improvements').value,
+                timeManagement: parseInt(document.getElementById('timeManagement').value),
+                energy: parseInt(document.getElementById('energy').value),
+                date: new Date().toISOString().slice(0, 10)
+            };
+
+            // Save the review data to localStorage
+            let reviews = JSON.parse(localStorage.getItem('dailyReviews')) || [];
+            reviews.push(reviewData);
+            localStorage.setItem('dailyReviews', JSON.stringify(reviews));
+
+            document.getElementById('successMessage').style.display = 'block';
+
+            // Update reviews list and chart
+            displayReviews();
+            updateChart();
+        });
+
+        // Display reviews in a list
+        function displayReviews() {
+            const reviews = JSON.parse(localStorage.getItem('dailyReviews')) || [];
+            const reviewList = document.getElementById('reviewList');
+            reviewList.innerHTML = ''; // Clear existing list
+
+            reviews.forEach(review => {
+                const li = document.createElement('li');
+                li.textContent = `${review.date}: Priority 1 - ${review.priority1}, Priority 2 - ${review.priority2}, Priority 3 - ${review.priority3}`;
+                reviewList.appendChild(li);
+            });
+        }
+
+        // Initialize the Chart.js chart
+        let chart;
+        function updateChart() {
+            const reviews = JSON.parse(localStorage.getItem('dailyReviews')) || [];
+            const dates = reviews.map(r => r.date);
+            const timeManagement = reviews.map(r => r.timeManagement);
+            const energyLevels = reviews.map(r => r.energy);
+
+            const ctx = document.getElementById('reviewChart').getContext('2d');
+            if (chart) {
+                chart.destroy(); // Destroy existing chart before creating a new one
+            }
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Time Management',
+                            data: timeManagement,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            fill: false
+                        },
+                        {
+                            label: 'Energy Levels',
+                            data: energyLevels,
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Score (1-10)'
+                            },
+                            min: 0,
+                            max: 10
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load reviews and chart on page load
+        window.onload = function () {
+            displayReviews();
+            updateChart();
+        };
+    </script>
+</body>
+</html>
