@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Review</title>
+
+    <!-- Import Google Fonts: Poppins for body, Pacifico for title -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            font-family: 'Helvetica', sans-serif;
-            background: url('background.jpg') no-repeat center center fixed;
+            font-family: 'Poppins', sans-serif; /* Use Poppins for the entire page */
+            background: url('background.jpg') no-repeat center center fixed; /* Use your background image */
             background-size: cover;
             color: #fff;
             margin: 0;
@@ -21,18 +25,25 @@
         }
 
         .container {
-            background-color: rgba(255, 255, 255, 0.85); /* Lightened background */
+            background-color: rgba(255, 255, 255, 0.65); /* Increased transparency */
             color: #333; /* Darker text for better contrast */
             border-radius: 10px;
             max-width: 800px;
             width: 100%;
             padding: 30px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Reduced shadow opacity */
             margin: 20px;
         }
 
-        h2, h3 {
+        h2 {
             color: #333; /* Dark text for headings */
+            font-family: 'Pacifico', cursive; /* Handwriting font for title */
+            font-size: 36px; /* Larger font size for title */
+        }
+
+        h3 {
+            color: #333; /* Dark text for subheadings */
+            font-weight: 600; /* Use a bold version of the font for headers */
         }
 
         input, textarea, button {
@@ -46,18 +57,20 @@
             box-sizing: border-box;
             background-color: #f0f0f0; /* Lightened input background */
             color: #333; /* Dark text */
+            font-family: 'Poppins', sans-serif;
         }
 
         button {
-            background-color: #4a90e2;
+            background-color: #9b59b6; /* Purple button */
             color: white;
             cursor: pointer;
             transition: background-color 0.3s ease;
             border: none;
+            font-family: 'Poppins', sans-serif;
         }
 
         button:hover {
-            background-color: #357ABD;
+            background-color: #8e44ad; /* Darker purple on hover */
         }
 
         #successMessage {
@@ -80,6 +93,7 @@
             padding: 10px;
             border-radius: 5px;
             color: #333; /* Dark text */
+            font-family: 'Poppins', sans-serif; /* Apply to list items */
         }
 
         ul li:nth-child(even) {
@@ -89,7 +103,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Daily Review</h2>
+        <h2>Daily Review</h2> <!-- Handwriting-style title -->
         <form id="dailyReviewForm">
             <label for="priority1">Priority 1:</label>
             <input type="text" id="priority1" name="priority1" placeholder="First priority of the day">
